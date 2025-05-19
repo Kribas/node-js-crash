@@ -1,13 +1,29 @@
-import http from 'http'
+import http from "http";
 
-const PORT = 8000
+const PORT = process.env.PORT;
 
 const server = http.createServer((req, res) => {
-    res.writeHead(500, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify({message: 'Server Error'}))
-})
+  try {
+    if (req.method === "GET") {
+      if (req.url === "/") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end("<h1>HomePage</h1>");
+      } else if (req.url === "/about") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end("<h1>AboutPage</h1>");
+      } else {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end("<h1>Not Found</h1>");
+      }
+    } else {
+      throw new Error("Method not allowed");
+    }
+  } catch (error) {
+    res.writeHead(500, { "Content-Type": "text/plain" });
+    res.end("Not Found");
+  }
+});
 
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    
-})
+  console.log(`Server running on port ${PORT}`);
+});
